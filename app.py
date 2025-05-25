@@ -267,7 +267,7 @@ def sync():
                   else:
                         object_founded = encontrar_siigo_id_en_zoho(client["id"], indexed_zoho_contacts_by_siigo_id)
                         if object_founded:
-                              res = requests.put(f'{zoho_url}/{object_founded['id']}', headers=headers_zoho, json=data_transformed)
+                              res = requests.put(f"{zoho_url}/{object_founded['id']}", headers=headers_zoho, json=data_transformed)
                               
                         else:
                               res = requests.post(zoho_url, headers=headers_zoho, json=data_transformed)
