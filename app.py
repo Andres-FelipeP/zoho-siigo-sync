@@ -98,7 +98,9 @@ def siigo_contacts_number(from_date_data, headers_siigo):
       # Obtener el número total de clientes
       try:
             print('Iniciando solicitud a la API de Siigo...')
+            print(f"Fecha de inicio: {from_date_data}")
             clients_response_1_siigo = requests.get(f"https://api.siigo.com/v1/customers?created_start={from_date_data}&page=1&page_size=1", headers=headers_siigo, timeout=30)
+            print(clients_response_1_siigo)
             print('Solicitud completada')
       except requests.exceptions.Timeout:
             print("La solicitud a la API de Siigo ha excedido el tiempo de espera (timeout)")
