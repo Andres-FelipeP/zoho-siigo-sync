@@ -260,7 +260,7 @@ def sync():
                   for n_page in range(1, result_pages_siigo+1):
                         clients_response_all_page = requests.get(f"https://api.siigo.com/v1/customers?created_start={fecha}&page={n_page}&page_size=100", headers=headers_siigo)
                         if clients_response_all_page.status_code != 200:
-                              return jsonify({"error": f"Error obteniendo clientes de Siigo. Status: {clients_response_all_page.status_code}", "response": clients_response_all_page.text}), 500
+                              return jsonify({"error": f"Error obteniendo clientes de Siigo. Status: {clients_response_all_page.status_code}"}), 500
                               
                         clients_response_all_page_parsed = clients_response_all_page.json()
                   
@@ -306,8 +306,8 @@ def sync():
                                     print(error_msg)
                                     continue
             except Exception as e:
-                  return jsonify({"error": f"Error durante la sincronización: {str(e)}", "logs_parciales": logs_zoho_integration}), 500
-            return jsonify({"success": "Datos sincronizados", "logs_zoho_integration": logs_zoho_integration})
+                  return jsonify({"error": f"Error durante la sincronización: {str(e)}"}), 500
+            return jsonify({"success": "Datos sincronizados"}), 200
       except Exception as e:
             return jsonify({"error": f"Error general en la sincronización: {str(e)}"}), 500
 
