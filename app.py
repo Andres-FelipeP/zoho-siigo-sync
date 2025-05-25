@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 import json
 import math
+from datetime import datetime
 
 app = Flask(__name__)
 load_dotenv()
@@ -82,7 +83,7 @@ def obtener_contactos_zoho(zoho_url, headers_zoho):
                         page += 1
                         
                   except json.JSONDecodeError:
-                        print("Error al decodificar la respuesta JSON")
+                        # print("Error al decodificar la respuesta JSON")
                         break
       
       except requests.exceptions.RequestException as e:
@@ -163,9 +164,9 @@ def get_siigo_data(client):
       tranformed_data["Mailing_Zip"] = client["address"]["city"]["city_code"]
       tranformed_data["Mailing_Country"] = client["address"]["city"]["country_name"]
       tranformed_data["Description"] = full_name
-      tranformed_data["Tipo_identificacion"] = client["id_type"]["name"][:100]
-      tranformed_data["Tipo"] = client["type"][:100] # Tpo usuario
-      tranformed_data["Tdentificacion"] = client["identification"][:100]
+      tranformed_data["Tipo_Identificacion"] = client["id_type"]["name"][:100]
+      tranformed_data["Tipo_Usuario"] = client["type"][:100] # Tpo usuario
+      tranformed_data["Identificacion"] = client["identification"][:100]
       tranformed_data["Tipo_Persona"] = client["person_type"]
       tranformed_data["SiigoID"] = client["id"]
       tranformed_data["Nombre_Empresa"] = full_name[:255]
@@ -195,12 +196,13 @@ def data_zoho_format(siigo_client_data):
                   "Mailing_Country": siigo_client_data["Mailing_Country"],
                   
                   "Description": siigo_client_data["Description"],
-                  "Tipo_identificacion": siigo_client_data["Tipo_identificacion"],
-                  "Tipo": siigo_client_data["Tipo"], # Tipo usuario
-                  "Tdentificacion": siigo_client_data["Tdentificacion"],
+                  "Tipo_Identificacion": siigo_client_data["Tipo_identificacion"],
+                  "Tipo_Usuario": siigo_client_data["Tipo"], # Tipo usuario
+                  "Identificacion": siigo_client_data["Tdentificacion"],
                   "Tipo_Persona": siigo_client_data["Tipo_Persona"],
                   "SiigoID": siigo_client_data["SiigoID"],
                   "Nombre_Empresa": siigo_client_data["Nombre_Empresa"],
+                  "Estado": siigo_client_data["Estado"],
             }]
       }
       
@@ -323,6 +325,11 @@ def mostrar_codigo():
 def static_files(filename):
       return send_from_directory(app.static_folder, filename)
 
+# Ruta para que el cronjob haga ping
+@app.route('/ping')
+def ping():
+      current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+      return jsonify({"message": "Ping successful", "timestamp": current_time})
 
 if __name__ == '__main__':
       app.run(debug=True)
