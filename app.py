@@ -212,70 +212,104 @@ def encontrar_siigo_id_en_zoho(siigo_id, contactos_zoho):
 
 @app.route('/sync', methods=['POST'])
 def sync():
-      # Obtener datos de Power Automate Forms office 365
-      data = request.json
-      fecha = data.get('fechaSincronizacion')
-      codigo = data.get('codigoZoho')
-      correo = data.get('correoNotificacion')
-      
-      if not fecha or not codigo:
-            return jsonify({"error": "Faltan datos"}), 400
-      
-      # Paso 1: Autenticacion a la API de ZOHO
-      print(f'codigoooo: {codigo}')
-      access_token_zoho = auth_zoho(codigo)
-      print(f'Acces token: {access_token_zoho}')
-      zoho_url = os.getenv("CONTACTS_URL_ZOHO")
-      headers_zoho = {
-            "Authorization": f"Zoho-oauthtoken {access_token_zoho}",
-            "Content-Type": "application/json"
-      }
-      ## Fin Paso 1
-      # Paso 2: Autenticacion a la API de Siigo
-      access_token_siigo, siigo_partner = auth_settings_variables_siigo()
-      headers_siigo = {
-            "Authorization": access_token_siigo,
-            "Partner-Id": siigo_partner,
-            "Content-Type": "application/json"
-      }
-      
-      clients_number_siigo, result_pages_siigo = siigo_contacts_number(fecha, headers_siigo)
-      counter_clientes = 0
-      zoho_contacts = obtener_contactos_zoho(zoho_url, headers_zoho)
-      indexed_zoho_contacts_by_siigo_id = indexar_por_siigo_id(zoho_contacts)
-      
-      #! Obtener todos los clientes de Siigo
-      logs_zoho_integration = 'Zoho Integration Logs:\n'
-      for n_page in range(1, result_pages_siigo+1 ):
-            clients_response_all_page = requests.get(f"https://api.siigo.com/v1/customers?created_start={fecha}&page={n_page}&page_size=100", headers=headers_siigo)
-            clients_response_all_page_parsed = clients_response_all_page.json()
+      try:
+            # Obtener datos de Power Automate Forms office 365
+            data = request.json
+            fecha = data.get('fechaSincronizacion')
+            codigo = data.get('codigoZoho')
+            correo = data.get('correoNotificacion')
             
-            # estos son los clientes de la pagina
-            clients_response_result = clients_response_all_page_parsed.get('results', [])
+            if not fecha or not codigo:
+                  return jsonify({"error": "Faltan datos"}), 400
+
+            # Paso 1: Autenticacion a la API de ZOHO
+            try:
+                  print(f'codigoooo: {codigo}')
+                  access_token_zoho = auth_zoho(codigo)
+                  print(f'Acces token: {access_token_zoho}')
+                  zoho_url = os.getenv("CONTACTS_URL_ZOHO")
+                  headers_zoho = {
+                  "Authorization": f"Zoho-oauthtoken {access_token_zoho}",
+                  "Content-Type": "application/json"
+                  }
+            except Exception as e:
+                  return jsonify({"error": f"Error en la autenticación de Zoho: {str(e)}"}), 500
+                  
+            # Paso 2: Autenticacion a la API de Siigo
+            try:
+                  access_token_siigo, siigo_partner = auth_settings_variables_siigo()
+                  headers_siigo = {
+                  "Authorization": access_token_siigo,
+                  "Partner-Id": siigo_partner,
+                  "Content-Type": "application/json"
+                  }
+            except Exception as e:
+                  return jsonify({"error": f"Error en la autenticación de Siigo: {str(e)}"}), 500
             
-            for client in clients_response_result:
-                  
-                  if counter_clientes == clients_number_siigo:
-                        break
-                  counter_clientes += 1
-                  
-                  siigo_client_data = get_siigo_data(client)
-                  data_transformed = data_zoho_format(siigo_client_data)
-                  
-                  if not zoho_contacts:
-                        res = requests.post(zoho_url, headers=headers_zoho, json=data_transformed)
-                  else:
-                        object_founded = encontrar_siigo_id_en_zoho(client["id"], indexed_zoho_contacts_by_siigo_id)
-                        if object_founded:
-                              res = requests.put(f"{zoho_url}/{object_founded['id']}", headers=headers_zoho, json=data_transformed)
+            try:
+                  clients_number_siigo, result_pages_siigo = siigo_contacts_number(fecha, headers_siigo)
+                  counter_clientes = 0
+                  zoho_contacts = obtener_contactos_zoho(zoho_url, headers_zoho)
+                  indexed_zoho_contacts_by_siigo_id = indexar_por_siigo_id(zoho_contacts)
+            except Exception as e:
+                  return jsonify({"error": f"Error obteniendo datos iniciales: {str(e)}"}), 500
+
+            #! Obtener todos los clientes de Siigo
+            logs_zoho_integration = 'Zoho Integration Logs:\n'
+            try:
+                  for n_page in range(1, result_pages_siigo+1):
+                        clients_response_all_page = requests.get(f"https://api.siigo.com/v1/customers?created_start={fecha}&page={n_page}&page_size=100", headers=headers_siigo)
+                        if clients_response_all_page.status_code != 200:
+                              return jsonify({"error": f"Error obteniendo clientes de Siigo. Status: {clients_response_all_page.status_code}", "response": clients_response_all_page.text}), 500
                               
-                        else:
-                              res = requests.post(zoho_url, headers=headers_zoho, json=data_transformed)
+                        clients_response_all_page_parsed = clients_response_all_page.json()
+                  
+                        # estos son los clientes de la pagina
+                        clients_response_result = clients_response_all_page_parsed.get('results', [])
+                        
+                        for client in clients_response_result:
                               
-                  logs_zoho_integration += f"{res.status_code} {res.json()}\n"
-                  
-                  
-      return jsonify({"message": "Datos sincronizados", "logs_zoho_integration": logs_zoho_integration})
+                              if counter_clientes == clients_number_siigo:
+                                    break
+                              counter_clientes += 1
+                              
+                              try:
+                                    siigo_client_data = get_siigo_data(client)
+                                    data_transformed = data_zoho_format(siigo_client_data)
+                                    
+                                    if not zoho_contacts:
+                                          # No hay contactos en Zoho, crear nuevo
+                                          res = requests.post(zoho_url, headers=headers_zoho, json=data_transformed)
+                                    else:
+                                          # Hay contactos en Zoho, verificar si este ya existe
+                                          object_founded = encontrar_siigo_id_en_zoho(client["id"], indexed_zoho_contacts_by_siigo_id)
+                                          
+                                          if object_founded:
+                                                # El contacto ya existe en Zoho, actualizarlo
+                                                res = requests.put(f"{zoho_url}/{object_founded['id']}", headers=headers_zoho, json=data_transformed)
+                                          else:
+                                                # El contacto no existe en Zoho, crearlo
+                                                res = requests.post(zoho_url, headers=headers_zoho, json=data_transformed)
+                                    
+                                    # Verificar si la respuesta fue exitosa
+                                    if res.status_code >= 400:
+                                          error_msg = f"Error al sincronizar cliente {client.get('id')}: {res.status_code} {res.text}"
+                                          logs_zoho_integration += f"{error_msg}\n"
+                                          print(error_msg)
+                                    else:
+                                          logs_zoho_integration += f"{res.status_code} {res.json()}\n"
+                                          
+                                          
+                              except Exception as e:
+                                    error_msg = f"Error procesando cliente {client.get('id')}: {str(e)}"
+                                    logs_zoho_integration += f"{error_msg}\n"
+                                    print(error_msg)
+                                    continue
+            except Exception as e:
+                  return jsonify({"error": f"Error durante la sincronización: {str(e)}", "logs_parciales": logs_zoho_integration}), 500
+            return jsonify({"success": "Datos sincronizados", "logs_zoho_integration": logs_zoho_integration})
+      except Exception as e:
+            return jsonify({"error": f"Error general en la sincronización: {str(e)}"}), 500
 
 @app.route('/')
 def mostrar_codigo():
