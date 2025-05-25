@@ -26,7 +26,12 @@ def auth_zoho(codigo):
       
       token_response = requests.post(token_url_zoho, params=params_zoho)
       token_json = token_response.json()
-      access_token = token_json.get("access_token")
+      
+      if "access_token" not in token_json:
+            print("Error al obtener tokens:", token_json)
+            exit()
+            
+      access_token = token_json["access_token"]
       if not access_token:
             return jsonify({"error": "No se pudo obtener token de Zoho"}), 400
       return access_token
@@ -81,6 +86,9 @@ def obtener_contactos_zoho(zoho_url, headers_zoho):
                         break
       
       except requests.exceptions.RequestException as e:
+            print(zoho_url)
+            print(headers_zoho)
+            print(params)
             print(f"Error al conectar con la API de Zoho: {e}")
       
       print(f"Total contactos obtenidos: {len(all_contacts)}")
@@ -214,7 +222,9 @@ def sync():
             return jsonify({"error": "Faltan datos"}), 400
       
       # Paso 1: Autenticacion a la API de ZOHO
+      print(f'codigoooo: {codigo}')
       access_token_zoho = auth_zoho(codigo)
+      print(f'Acces token: {access_token_zoho}')
       zoho_url = os.getenv("CONTACTS_URL_ZOHO")
       headers_zoho = {
             "Authorization": f"Zoho-oauthtoken {access_token_zoho}",
