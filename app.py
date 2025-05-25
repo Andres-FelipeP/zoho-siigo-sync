@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template, send_from_directory
 import requests
 import os
 from dotenv import load_dotenv
@@ -266,6 +266,17 @@ def sync():
                   
                   
       return jsonify({"message": "Datos sincronizados", "logs_zoho_integration": logs_zoho_integration})
+
+@app.route('/')
+def mostrar_codigo():
+      code = request.args.get('code')
+      return render_template('codigo.html', code=code)
+
+# Ruta para logo u otros recursos
+@app.route('/static/<path:filename>')
+def static_files(filename):
+      return send_from_directory(app.static_folder, filename)
+
 
 if __name__ == '__main__':
       app.run(debug=True)
