@@ -218,8 +218,25 @@ def encontrar_siigo_id_en_zoho(siigo_id, contactos_zoho):
       # retorn objeto Tipo contacto de Zoho o None
       return contactos_zoho.get(siigo_id)
 
+def get_zoho_user_info(access_token):
+      url = "https://accounts.zoho.com/oauth/user/info"
+      headers = {"Authorization": f"Zoho-oauthtoken {access_token}"}
+      response = requests.get(url, headers=headers)
+      if response.status_code == 200:
+            return response.json()  # Aquí está la info del usuario
+      else:
+            return None
 
 
+def login_with_zoho(access_token, allowed_emails):
+      # Obtener info del usuario de Zoho (ejemplo)
+      user_info = get_zoho_user_info(access_token)
+      user_email = user_info.get("email")
+      
+      if user_email not in allowed_emails:
+            raise Exception("Usuario no autorizado")
+      return user_info
+      
 @app.route('/sync', methods=['POST'])
 def sync():
       try:
@@ -228,6 +245,9 @@ def sync():
             fecha = data.get('fechaSincronizacion')
             codigo = data.get('codigoZoho')
             correo = data.get('correoNotificacion')
+            allowed_emails = os.getenv("ALLOWED_EMAILS", "")
+            allowed_emails = [email.strip() for email in allowed_emails.split(",") if email.strip()]
+
             
             if not fecha or not codigo:
                   return jsonify({"error": "Faltan datos"}), 400
@@ -236,6 +256,12 @@ def sync():
             try:
                   print(f'codigoooo: {codigo}')
                   access_token_zoho = auth_zoho(codigo)
+                  
+                  try:
+                        login_with_zoho(access_token_zoho, allowed_emails)
+                  except Exception as e:
+                        return jsonify({"error": f"Usuario Zoho inválido: {str(e)}"}), 403
+                  
                   print(f'Acces token: {access_token_zoho}')
                   zoho_url = os.getenv("CONTACTS_URL_ZOHO")
                   headers_zoho = {
