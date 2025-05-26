@@ -196,7 +196,7 @@ def data_zoho_format(siigo_client_data):
                   "Mailing_Country": siigo_client_data["Mailing_Country"],
                   
                   "Description": siigo_client_data["Description"],
-                  "Tipo_Identificacion": siigo_client_data["Tipo_identificacion"],
+                  "Tipo_Identificacion": siigo_client_data["Tipo_Identificacion"],
                   "Tipo_Usuario": siigo_client_data["Tipo"], # Tipo usuario
                   "Identificacion": siigo_client_data["Tdentificacion"],
                   "Tipo_Persona": siigo_client_data["Tipo_Persona"],
