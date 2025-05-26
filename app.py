@@ -10,6 +10,46 @@ app = Flask(__name__)
 load_dotenv()
 
 
+def current_user_zoho(access_token):
+      header_user_current = {
+            "Authorization": f"Zoho-oauthtoken {access_token}",
+            "Content-Type": "application/json"
+      }
+      user_current_url = "https://www.zohoapis.com/crm/v2/users?type=CurrentUser"
+      whitelist_str = os.getenv('WHITE_LIST_ZOHO', '')
+      whitelist = [email.strip() for email in whitelist_str.split(',')]
+
+      try:
+            response = requests.get(user_current_url, headers=header_user_current)
+            response.raise_for_status()
+            data = response.json()
+            
+            if 'users' in data and len(data['users']) > 0:
+                  user = data['users'][0]
+                  user_id = user.get('id')
+                  user_email = user.get('email')
+                  
+                  print(f"User ID: {user_id}")
+                  print(f"User Email: {user_email}")
+                  
+                  if user_email in whitelist:
+                        print(f"User {user_email} is in the whitelist. Access granted.")
+                        return True
+                  else:
+                        print(f"User {user_email} is NOT in the whitelist. Access denied.")
+                        return False, f"Usuario {user_email} no autorizado para realizar esta operación"
+            else:
+                  return False, "No se pudo obtener información del usuario de Zoho"
+                  
+      except requests.exceptions.RequestException as e:
+            return False, f"Error en la conexión con Zoho API: {str(e)}"
+      except json.JSONDecodeError as e:
+            return False, f"Error al procesar respuesta de Zoho: {str(e)}"
+      except Exception as e:
+            return False, f"Error validando usuario de Zoho: {str(e)}"
+
+      
+
 def auth_zoho(codigo):
       # Paso 1: Obtener access token con el código
       token_url_zoho = os.getenv("TOKEN_URL_ZOHO")
@@ -236,6 +276,15 @@ def sync():
             try:
                   print(f'codigoooo: {codigo}')
                   access_token_zoho = auth_zoho(codigo)
+                  
+                  user_validation = current_user_zoho(access_token_zoho)
+                  if user_validation != True:
+                        # Si no es True, entonces es una tupla (False, error_message)
+                        if isinstance(user_validation, tuple):
+                              return jsonify({"error": user_validation[1]}), 403
+                        else:
+                              return jsonify({"error": "Error de validación de usuario"}), 403
+                  
                   
                   print(f'Acces token: {access_token_zoho}')
                   zoho_url = os.getenv("CONTACTS_URL_ZOHO")
