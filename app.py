@@ -18,15 +18,21 @@ def auth_zoho(codigo):
       redirect_uri_zoho = os.getenv("REDIRECT_URI_ZOHO")
       
       params_zoho = {
+            "code": codigo,
             "grant_type": "authorization_code",
+            "scope": "ZohoCRM.modules.ALL,ZohoCRM.settings.ALL",
             "client_id": client_id_zoho,
             "client_secret": client_secret_zoho,
             "redirect_uri": redirect_uri_zoho,
-            "code": codigo
+            
       }
       
       token_response = requests.post(token_url_zoho, params=params_zoho)
+      print(f"Token response url: {token_response.url}")
+      print(f"Token response: {token_response}")
+
       token_json = token_response.json()
+      
       
       if "access_token" not in token_json:
             print("Error al obtener tokens:", token_json)
