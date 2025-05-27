@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Zoho client services - LIENXO{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+      <style>
+            /* Color personalizado para navbar y footer */
+            .bg-dark-gray {
+                  background-color: #494949;
+            }
+            
+            .btn-custom-orange {
+                  background-color: #EA5437;
+                  border-color: #EA5437;
+                  color: white;
+            }
+            .btn-custom-orange:hover {
+                  background-color: #EA5437;
+                  border-color: #EA5437;
+                  color: white;
+            }
+            .text-custom-orange {
+                  color: #EA5437;
+            }
+      </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+    
+<!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark-gray shadow-sm">
+            <div class="container-fluid">
+                  <!-- Logo -->
+                  <a class="navbar-brand d-flex align-items-center" href="/">
+                        
+                        <span class="fw-bold">DEKOTENDENCIA</span>
+                  </a>
+                  
+                  <!-- Mobile menu button -->
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <span class="navbar-toggler-icon"></span>
+                  </button>
+                  
+                  <!-- Navigation menu -->
+                  <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                              <li class="nav-item">
+                                    <a class="nav-link" href="{{ url_for('leads') }}">
+                                    <i class="bi bi-person-plus-fill me-1"></i>
+                                    Leads
+                                    </a>
+                              </li>
+                              <li class="nav-item">
+                                    <a class="nav-link" href="{{ url_for('casos') }}">
+                                    <i class="bi bi-file-earmark-text-fill me-1"></i>
+                                    Casos
+                                    </a>
+                              </li>
+                              <li class="nav-item">
+                                    <a class="nav-link" href="{{ url_for('proveedores') }}">
+                                    <i class="bi bi-building-fill me-1"></i>
+                                    Proveedores
+                                    </a>
+                              </li>
+                        </ul>
+                  </div>
+            </div>
+      </nav>
+
+      <!-- Main Content -->
+      <div class="container py-5">
+            <div class="row justify-content-center">
+                  <div class="col-lg-8 col-md-10 col-12">
+                  
+                  <!-- Header Card -->
+                  <div class="card border-0 shadow-lg mb-4">
+                        <div class="card-header bg-dark-gray text-white text-center py-4">
+                              <h1 class="card-title mb-0 fw-bold">
+                              <i class="{% block header_icon %}bi bi-clipboard-data{% endblock %} me-2"></i>
+                              {% block page_title %}Zoho client services{% endblock %}
+                              </h1>
+                              {% block subtitle %}
+                              <p class="card-text mt-2 mb-0 opacity-75">
+                              Complete el formulario con la información requerida
+                              </p>
+                              {% endblock %}
+                        </div>
+                        
+                        <!-- Form Content -->
+                        <div class="card-body p-4">
+                              {% block content %}
+                              <div class="text-center">
+                                    <i class="bi bi-house-fill display-1 text-muted mb-3"></i>
+                                    <h3>Bienvenido al Sistema LIENXO</h3>
+                                    <p class="text-muted">Seleccione una opción del menú superior para continuar.</p>
+                                    <a href="{{ url_for('leads') }}" class="btn btn-custom-orange mt-3">
+                                          <i class="bi bi-arrow-right-circle-fill me-2"></i>
+                                          Ir a Leads
+                                    </a>
+                                    <a href="{{ url_for('casos') }}" class="btn btn-custom-orange mt-3">
+                                          <i class="bi bi-arrow-right-circle-fill me-2"></i>
+                                          Ir a Casos
+                                    </a>
+                                    <a href="{{ url_for('proveedores') }}" class="btn btn-custom-orange   mt-3">
+                                          <i class="bi bi-arrow-right-circle-fill me-2"></i>
+                                          Ir a Proveedores
+                                    </a>
+                              </div>
+                              {% endblock %}
+                        </div>
+                  </div>
+                  
+                  </div>
+            </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="bg-dark-gray text-white text-center py-4 mt-auto">
+            <div class="container">
+                  <div class="row">
+                  <div class="col-12">
+                        <p class="mb-2">
+                              <i class="bi bi-c-circle me-1"></i>
+                              2025 LIENXO. Todos los derechos reservados.
+                        </p>
+                        <small class="text-white-50">
+                              
+                              <p class="text-white"><i class="bi bi-shield-check me-1"></i>Sistema seguro y confiable</p>
+                        </small>
+                  </div>
+                  </div>
+            </div>
+      </footer>
+
+      <!-- Bootstrap JS -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+      
+      {% block scripts %}
+      
+      {% endblock %}
+      
+</body>
+</html>

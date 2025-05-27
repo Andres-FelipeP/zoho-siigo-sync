@@ -1,104 +1,71 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dekotendencia | Código de Integración</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #fdfdfd;
-      color: #333;
-      text-align: center;
-      padding: 2rem;
-    }
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background: white;
-      border-radius: 12px;
-      padding: 2rem;
-      box-shadow: 0 0 30px rgba(0,0,0,0.1);
-    }
-    .logo {
-      max-width: 180px;
-      margin-bottom: 1rem;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.3rem;
-      color: #111;
-    }
-    h2 {
-      font-weight: 400;
-      font-size: 1rem;
-      color: #888;
-      margin-bottom: 2rem;
-    }
-    .code-box {
-      background: #f3f3f3;
-      border: 2px dashed #e0653b;
-      border-radius: 8px;
-      padding: 1rem;
-      font-family: monospace;
-      font-size: 1.1rem;
-      color: #e0653b;
-      word-wrap: break-word;
-      margin-bottom: 1rem;
-    }
-    .copy-btn {
-      background-color: #e0653b;
-      color: white;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      font-size: 0.95rem;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    .copy-btn:hover {
-      background-color: #c94f2e;
-    }
-    .footer {
-      margin-top: 2rem;
-      font-size: 0.85rem;
-      color: #aaa;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <img class="logo" src="/static/logo.png" alt="Logo LIENXO" />
-    <h1>DEKOTENDENCIA</h1>
-    <h2>Código de Integración Siigo - Zoho CRM</h2>
-    <div class="code-box" id="codigo">Cargando...</div>
-    <button class="copy-btn" onclick="copiarCodigo()">Copiar código</button>
-    <div class="footer">
-      © 2025 LIENXO. Todos los derechos reservados.
-    </div>
-  </div>
+{% extends "base.html" %}
 
-  <script>
+{% block title %}Código de Integración - DEKOTENDENCIA{% endblock %}
+{% block header_icon %}bi bi-code-square{% endblock %}
+{% block page_title %}Código de Integración{% endblock %}
+{% block subtitle %}
+<p class="card-text mt-2 mb-0 opacity-75">
+    Siigo - Zoho CRM
+</p>
+{% endblock %}
+
+{% block content %}
+<div class="text-center py-4">
+    <!-- Logo centrado -->
+    <img src="/static/logo.png" alt="Logo LIENXO" class="img-fluid mb-4" style="max-height: 60px;">
+    
+    <!-- Título principal -->
+    <h2 class="fw-bold mb-2">DEKOTENDENCIA</h2>
+    
+    <!-- Subtítulo -->
+    <p class="text-muted mb-5">Código de Integración Siigo - Zoho CRM</p>
+    
+    <!-- Contenedor del código con borde punteado -->
+    <div class="border border-custom-orange border-2 rounded-3 p-4 mb-4 mx-auto" style="max-width: 600px; border-style: dashed !important; border-color: #EA5437 !important;">
+        <pre id="codigo" class="mb-0 text-center" style="font-family: inherit; white-space: pre-wrap; color: #EA5437;">Cargando...</pre>
+    </div>
+    
+    <!-- Botón de copiar -->
+    <button id="copyBtn" onclick="copiarCodigo()" class="btn btn-custom-orange px-4 py-2 mb-5">
+        <i class="bi bi-clipboard me-2"></i>Copiar código
+    </button>
+    
+    <!-- Footer del contenido -->
+    <p class="text-muted">
+        <small>© 2025 LIENXO. Todos los derechos reservados.</small>
+    </p>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
     const codeElement = document.getElementById("codigo");
+    const copyBtn = document.getElementById("copyBtn");
 
     if (code) {
-      codeElement.textContent = code;
+        codeElement.textContent = code;
     } else {
-      codeElement.textContent = "No se encontró el código.";
+        codeElement.textContent = "No se encontró el código.";
     }
 
     function copiarCodigo() {
-      const texto = codeElement.textContent;
-      navigator.clipboard.writeText(texto)
-        .then(() => {
-          alert("Código copiado al portapapeles.");
-        })
-        .catch(err => {
-          alert("Hubo un error al copiar el código.");
-        });
+        const texto = codeElement.textContent;
+        navigator.clipboard.writeText(texto)
+            .then(() => {
+                // Cambiar el botón temporalmente para mostrar éxito
+                copyBtn.innerHTML = '<i class="bi bi-check-lg me-2"></i>Código copiado';
+                copyBtn.classList.remove('btn-custom-orange');
+                copyBtn.classList.add('btn-success');
+                
+                // Restaurar el botón después de 2 segundos
+                setTimeout(() => {
+                    copyBtn.innerHTML = '<i class="bi bi-clipboard me-2"></i>Copiar código';
+                    copyBtn.classList.remove('btn-success');
+                    copyBtn.classList.add('btn-custom-orange');
+                }, 2000);
+            });
     }
-  </script>
-</body>
-</html>
+</script>
+{% endblock %}

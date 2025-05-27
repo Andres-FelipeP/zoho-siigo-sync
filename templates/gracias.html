@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Agradecimiento - DEKOTENDENCIA{% endblock %}
+{% block header_icon %}bi bi-check-circle{% endblock %}
+{% block page_title %}¡Gracias por tu mensaje!{% endblock %}
+{% block subtitle %}
+<p class="card-text mt-2 mb-0 opacity-75 text-custom-orange">
+    Nos pondremos en contacto contigo pronto
+</p>
+{% endblock %}
+
+{% block content %}
+<div class="text-center py-4">
+    <!-- Logo centrado -->
+    <img src="/static/logo.png" alt="Logo LIENXO" class="img-fluid mb-4" style="max-height: 60px;">
+    
+    <!-- Ícono de éxito -->
+    <div class="mb-4">
+        <i class="bi bi-check-circle-fill display-1 text-custom-orange"></i>
+    </div>
+    
+    <!-- Título principal -->
+    <h2 class="fw-bold mb-3 text-custom-orange">¡Solicitud recibida!</h2>
+    
+    <!-- Mensaje de agradecimiento -->
+    <div class="border border-custom-orange border-2 rounded-3 p-4 mb-4 mx-auto" style="max-width: 600px; border-style: dashed !important; border-color: #EA5437 !important;">
+        <p class="mb-3">Gracias por contactar con DEKOTENDENCIA.</p>
+        <p class="mb-3">Hemos recibido tu información correctamente y un miembro de nuestro equipo se pondrá en contacto contigo en las próximas 24-48 horas.</p>
+        <p class="mb-0">Si tienes alguna duda adicional, no dudes en llamarnos.</p>
+    </div>
+    
+    <!-- Botón de volver -->
+    <a href="/" class="btn btn-custom-orange px-4 py-2 mb-3">
+        <i class="bi bi-house-fill me-2"></i>Volver al inicio
+    </a>
+    
+    <!-- Información de contacto -->
+    <div class="mt-2">
+        <p class="fw-bold text-custom-orange mb-2">¿Necesitas ayuda inmediata?</p>
+        <p class="mb-2"><i class="bi bi-telephone-fill me-2 text-custom-orange"></i>Llámanos: (123) 456-7890</p>
+        <p class="mb-2"><i class="bi bi-envelope-fill me-2 text-custom-orange"></i>Escríbenos: contacto@dekotendencia.com</p>
+        
+    </div>
+    <div class="mt-2">
+        
+        <div class="d-flex justify-content-center gap-3">
+            <a href="https://instagram.com/dekotendencia" target="_blank" class="text-decoration-none">
+                <i class="bi bi-instagram fs-3 text-custom-orange"></i>
+            </a>
+            <a href="https://facebook.com/dekotendencia" target="_blank" class="text-decoration-none">
+                <i class="bi bi-facebook fs-3 text-custom-orange"></i>
+            </a>
+            <a href="https://twitter.com/dekotendencia" target="_blank" class="text-decoration-none">
+                <i class="bi bi-twitter-x fs-3 text-custom-orange"></i>
+            </a>
+        </div>
+    </div>
+    <!-- Footer del contenido -->
+    <p class="text-muted mt-3">
+        <small>© 2025 LIENXO. Todos los derechos reservados.</small>
+    </p>
+</div>
+{% endblock %}

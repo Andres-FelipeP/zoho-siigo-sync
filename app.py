@@ -371,7 +371,7 @@ def sync():
       except Exception as e:
             return jsonify({"error": f"Error general en la sincronización: {str(e)}"}), 500
 
-@app.route('/')
+@app.route('/code')
 def mostrar_codigo():
       code = request.args.get('code')
       return render_template('codigo.html', code=code)
@@ -386,6 +386,26 @@ def static_files(filename):
 def ping():
       current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
       return jsonify({"message": "Ping successful", "timestamp": current_time})
+
+@app.route('/leads')
+def leads():
+      return render_template('leads.html')
+
+@app.route('/casos')
+def casos():
+      return render_template('casos.html')
+
+@app.route('/proveedores')
+def proveedores():
+      return render_template('proveedores.html')
+
+@app.route('/')
+def home():
+      return render_template('base.html')
+
+@app.route('/exito')
+def exito():
+      return render_template('gracias.html')
 
 if __name__ == '__main__':
       app.run(debug=True)
