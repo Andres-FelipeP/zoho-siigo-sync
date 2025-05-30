@@ -1,19 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
       <h1 class="text-center">Formulario de Casos</h1>
- <div id = 'crmWebToEntityForm' class = 'zcwf_lblLeft crmWebToEntityForm' style = 'background-color: white;color: black;max-width: 600px;'>
+	<!-- Note :
+   - You can modify the font style and form style to suit your website. 
+   - Code lines with comments Do not remove this code are required for the form to work properly, make sure that you do not remove these lines of code. 
+   - The Mandatory check script can modified as to suit your business needs. 
+   - It is important that you test the modified form before going live.-->
+<div id = 'crmWebToEntityForm' class = 'zcwf_lblLeft crmWebToEntityForm' style = 'background-color: white;color: black;max-width: 600px;'>
 	<meta name = 'viewport' content = 'width=device-width, initial-scale=1.0'>
 		<META HTTP-EQUIV = 'content-type' CONTENT = 'text/html;charset=UTF-8'>
 			<form id = 'webform6801273000000638099' action = 'https://crm.zoho.com/crm/WebToCaseForm' name = WebToCases6801273000000638099 method = 'POST' onSubmit = 'javascript:document.charset="UTF-8"; return checkMandatory6801273000000638099()' accept-charset = 'UTF-8'>
-				<input type = 'text' style = 'display:none;' name = 'xnQsjsdp' value = '2252e0382d426ae0f528aea4443431c09b70f087a6097fbbc5cf10a77b3ea0fc'>
+				<input type = 'text' style = 'display:none;' name = 'xnQsjsdp' value = '9a5ba999289182ab72cb24e89dc33dcc0a5b664a15108995891cc107093b6597'>
 				</input>
 				<input type = 'hidden' name = 'zc_gad' id = 'zc_gad' value = ''>
 				</input>
-				<input type = 'text' style = 'display:none;' name = 'xmIwtLD' value = '329dcb6da3f45d9c30c0a9386b93bfad23fab534c0fe43f57666d84ca9679ab0b6c39f149c00935c9d3fbe7b9fb06d2e'>
+				<input type = 'text' style = 'display:none;' name = 'xmIwtLD' value = '34acdb7bb295e7ffff7870eb4f2618a7aa807fc2012868cb89c6f7d76fe3d4e24084855024a510c4d0777de4a73016ad'>
 				</input>
 				<input type = 'text' style = 'display:none;' name = 'actionType' value = 'Q2FzZXM='>
 				</input>
-				<input type = 'text' style = 'display:none;' name = 'returnURL' value = 'https&#x3a;&#x2f;&#x2f;zoho-siigo-sync.onrender.com&#x2f;exito'>
+				<input type = 'text' style = 'display:none;' name = 'returnURL' value = 'https&#x3a;&#x2f;&#x2f;zoho-siigo-sync-2izg.onrender.com&#x2f;exito'>
 				</input>
 				<!-- Do not remove this code. -->
 				<style>
@@ -596,7 +601,6 @@
 							</div>
 						</div>
 						<script type='text/javascript'>
-                                          {% raw %}
 							var formCalender = {
 								userPattern: 'YYYY-MM-DD',
 								currDateObj: void 0, currMonth: void 0, currYear: void 0, currDate: void 0, currMonthEnd: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31], monthName: void 0, days: void 0, displayPanel: void 0, isHideToday: void 0, calDefColor: '#515CCB',
@@ -1037,7 +1041,6 @@
 									return void 0 !== e
 								}
 							};
-                                          {% endraw %}
 						</script>
 						<style>
 							#calenDiv{
@@ -1285,9 +1288,8 @@
 							}
 						</script>
 						<!-- Do not remove this --- Analytics Tracking code starts -->
-						<script id='wf_anal' src='https://crm.zohopublic.com/crm/WebFormAnalyticsServeServlet?rid=6fc6d221d3f85805f49b97d5f925bd45f0976ed16fcd3dfb3d1cc3923e75d8a21b5fdf608b40ffa8c076845ec693765agida9cb0d2bc7fe83c758844080b6f48ea19fb5a9cb0e227a22e172172fa68a4098gid0450054a5f42264b43a2b2aea9b69e0ead01be27c9b68cf921306f54e5503b81gidf5b403b05f8e725998c512efc7af032dba4635af105d4775cb13e0e0d35a266b&tw=0b3d57d0507c23da1f7d3afd9c0f473fea3cd4428e1ec92fca4a41b3571ed22e'></script>
+						<script id='wf_anal' src='https://crm.zohopublic.com/crm/WebFormAnalyticsServeServlet?rid=abcea222050640e5676b6a0064d2697739572422f4083a61de9e42eb83140a25ea0cea29a4c46cea52e83025940c20e0gid9080c3a0bef60c1c1d3278a1ad35a1160eb3ac0741f3256726595cc4f10e66aegidc6fe501d100a5197bd942db39c9b729b8ee3336c02f81a7e500936fae28ea491gidd25e8e2d79fe193dec0fc5f55621b394408caf9419829150841ec8b67372c6b1&tw=7ca69a97ef9d23078b0b387d7630dc9205eb87c76fc207ac3d4f67a878e28bed'></script>
 						<!-- Do not remove this --- Analytics Tracking code ends. -->
 					</form>
 				</div>
-         
 {% endblock %}
