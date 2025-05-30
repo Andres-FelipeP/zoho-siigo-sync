@@ -600,7 +600,9 @@
 							<input type = 'reset' class = 'zcwf_button' role = 'button' name = 'reset' value = 'Restablecer' aria-label = 'Restablecer' title = 'Restablecer'>
 							</div>
 						</div>
+						
 						<script type='text/javascript'>
+							{% raw %}
 							var formCalender = {
 								userPattern: 'YYYY-MM-DD',
 								currDateObj: void 0, currMonth: void 0, currYear: void 0, currDate: void 0, currMonthEnd: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31], monthName: void 0, days: void 0, displayPanel: void 0, isHideToday: void 0, calDefColor: '#515CCB',
@@ -1041,6 +1043,7 @@
 									return void 0 !== e
 								}
 							};
+							{% endraw %}
 						</script>
 						<style>
 							#calenDiv{
